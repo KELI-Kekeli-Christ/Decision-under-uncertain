@@ -1,0 +1,23 @@
+STATISTICS
+  Problem name     : model
+  Variables        : 12 (12 binary, 0 integer, 0 implicit integer, 0 continuous)
+  Constraints      : 0 initial, 2 maximal
+OBJECTIVE
+  Sense            : maximize
+VARIABLES
+  [binary] <select0>: obj=10, original bounds=[0,1]
+  [binary] <select1>: obj=20, original bounds=[0,1]
+  [binary] <select2>: obj=40, original bounds=[0,1]
+  [binary] <assignto0_0>: obj=0, original bounds=[0,1]
+  [binary] <assignto0_1>: obj=0, original bounds=[0,1]
+  [binary] <assignto0_2>: obj=0, original bounds=[0,1]
+  [binary] <assignto1_0>: obj=0, original bounds=[0,1]
+  [binary] <assignto1_1>: obj=0, original bounds=[0,1]
+  [binary] <assignto1_2>: obj=0, original bounds=[0,1]
+  [binary] <assignto2_0>: obj=0, original bounds=[0,1]
+  [binary] <assignto2_1>: obj=0, original bounds=[0,1]
+  [binary] <assignto2_2>: obj=0, original bounds=[0,1]
+CONSTRAINTS
+  [linear] <c1>: <assignto0_0>[B] +<assignto1_0>[B] <= 1;
+  [linear] <c2>: <assignto0_2>[B] +<assignto1_2>[B] <= 1;
+END
