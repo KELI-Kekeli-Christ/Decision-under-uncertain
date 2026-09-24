@@ -12,7 +12,7 @@ from pyscipopt import Model, quicksum
 from itertools import product
 
 # on charge les données
-from spotProba1 import nbImages, nbInstruments, PA, DD, AN, VI, DU, TY, PM, PMmax, Failure, ProbaInf, ProbaSup
+from spotProba5 import nbImages, nbInstruments, PA, DD, AN, VI, DU, TY, PM, PMmax, Failure, ProbaInf, ProbaSup
 
 
 # creation du modele lineaire
@@ -34,12 +34,29 @@ for i in range(nbImages):
         ass_i[j] = mymodel.addVar(vtype='B', name='assignto' + str(i) + '_' + str(j))
     assignedTo[i] = ass_i
 
+
 # la fonction objectif
 ######################
 
 # en l'absence d'incertitude, on maximise la somme des payoff
-mymodel.setObjective(quicksum(PA[i] * selection[i] for i in range(nbImages)), sense='maximize')
+# objectif d'amorge A CHANGER ?
 
+# si mono prix d'image * proba de bon temps * proba de non panne ( 1 - panne) de l'instrument au quel on affecte 
+# si streo prix * proba bonne temps * proba de non panne de 0 et 2 
+# mono c'est TY[I] = 1 , streo TY[I] = 2
+
+alpha = 1 # pessimiste 
+proba_bon_temps = [1- (alpha * ProbaSup[i] + (1 - alpha) * ProbaInf[i]) for i in range(nbImages)]
+proba_non_panne = [1 - Failure[i] for i in range(nbInstruments)]
+
+# proba bon temps = 1 - (alpha * proba sup + (1-alpha) * proba inf)
+mymodel.setObjective(
+    quicksum(PA[i] * proba_bon_temps[i] * proba_non_panne[j] * assignedTo[i][j]
+    for i in range(nbImages) if TY[i] == 1
+    for j in range(nbInstruments))
+    + quicksum(PA[i] * proba_bon_temps[i] * proba_non_panne[0] * proba_non_panne[2] * selection[i]
+    for i in range(nbImages) if TY[i] == 2)
+    , sense='maximize')
 
 
 # ajout des contraintes au modele
@@ -51,6 +68,9 @@ mymodel.setObjective(quicksum(PA[i] * selection[i] for i in range(nbImages)), se
 # ne tient pas entre la fin de ima1 et le debut de ima2 
 # alors une seule de ces deux images au plus peut etre assignée à l'instrument
 
+
+# Contrainte 1 de non chevechement : pour chaque combinaision d'image  
+# ajout de ce que cause probleme au solver comme contraintes 
 for ima1,ima2 in product(range(nbImages), range(nbImages)):
     if ima1 < ima2:
         for ins in range(nbInstruments):
@@ -58,7 +78,18 @@ for ima1,ima2 in product(range(nbImages), range(nbImages)):
                 mymodel.addCons(assignedTo[ima1][ins] + assignedTo[ima2][ins] <= 1)
                 
 
- 
+# AJOUTER LES DEUX CONTRAINTE MEMOIRE ET AFFECTATION !!!! 
+
+# Contraint de memoire  
+mymodel.addCons(quicksum(PM[i] * selection[i] for i in range(nbImages)) <= PMmax)
+
+#contrainte d'affection : si stereo les images peuvent pas etre affecte au nadir
+mymodel.addCons(quicksum(assignedTo[i][1] for i in range(nbImages) if TY[i] == 2) == 0)
+
+
+# si choisi on doit affecter l'image à un instrument ou deux si stereo
+for i in range(nbImages):
+    mymodel.addCons(quicksum(assignedTo[i][j] for j in range(nbInstruments)) == TY[i]*selection[i])
                 
 # resolution et affichage des resulats
 #########################################
