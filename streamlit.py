@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import streamlit as st
 
-import spotProba as sp
+import spotProbaPartial as sp
 
 DATASETS = ["spotProba1", "spotProba2", "spotProba3", "spotProba4", "spotProba5"]
 
