@@ -3,7 +3,7 @@
 # add contrainte affectation (pas prendre 2 fois la same image)
 nbImages = 3
 
-TY = [1, 2, 1] # type: 1 mono , stereo
+TY = [1, 2, 1] # type
 
 PM = [10, 20, 10] # taille de image mono:10 , stereo:20
 
