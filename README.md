@@ -22,7 +22,7 @@ pip install pyscipopt streamlit pandas matplotlib
 Lancer le tableau de bord :
 
 ```bash
-streamlit run app_streamlit.py
+streamlit run streamlit.py
 ```
 
 Exécuter le modèle :
