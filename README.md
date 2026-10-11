@@ -50,4 +50,4 @@ python spotProbaPartial.py --all
 - OUATTARA Aminata Kampanougou
 - KELI Kekeli Christ
 
-*Master 2 IAFA — Université de Toulouse, Groupe 12*
+*Master 2 IAFA — Université de Toulouse*
