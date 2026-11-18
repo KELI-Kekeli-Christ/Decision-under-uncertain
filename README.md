@@ -1,3 +1,11 @@
+<p align="center">
+  <a href="README.md"><b>English</b></a>
+  &nbsp;·&nbsp;
+  <a href="README.fr.md">Français</a>
+  &nbsp;·&nbsp;
+  <a href="README.es.md">Español</a>
+</p>
+
 # Optimisation du plan d’acquisition du satellite SPOT-5
 
 Ce projet vise à maximiser le gain des images acquises par le satellite SPOT-5, en tenant compte des contraintes de mémoire, de disponibilité des instruments, des conflits temporels et des incertitudes liées aux nuages et aux pannes.
